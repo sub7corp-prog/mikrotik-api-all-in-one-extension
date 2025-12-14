@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MikrotikApiExtension" default="package" basedir=".">
+
+    <!-- =========================
+         ===== PROPERTIES ========
+         ========================= -->
+
+    <!-- Nombre del componente (como aparecerá en AI2) -->
+    <property name="component.name" value="MikrotikApiExtension"/>
+
+    <!-- Paquete base -->
+    <property name="package.name" value="com.sub7corp.mikrotikapi"/>
+
+    <!-- Versión de la extensión -->
+    <property name="component.version" value="2"/>
+
+    <!-- Directorios -->
+    <property name="src.dir" value="com"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+
+    <!-- App Inventor SDK -->
+    <!-- AJUSTA ESTA RUTA A TU MAQUINA -->
+    <property name="ai.sdk.dir" value="C:/AppInventor"/>
+
+    <!-- android.jar -->
+    <property name="android.jar"
+              value="${ai.sdk.dir}/android.jar"/>
+
+    <!-- Librerías extra (si agregas jars después) -->
+    <property name="lib.dir" value="lib"/>
+
+    <!-- =========================
+         ===== CLASSPATH =========
+         ========================= -->
+
+    <path id="classpath">
+        <pathelement location="${android.jar}"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <!-- =========================
+         ===== CLEAN =============
+         ========================= -->
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- =========================
+         ===== COMPILE ===========
+         ========================= -->
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+
+        <javac
+                srcdir="${src.dir}"
+                destdir="${classes.dir}"
+                encoding="UTF-8"
+                source="1.8"
+                target="1.8"
+                includeantruntime="false"
+                debug="true"
+                classpathref="classpath">
+        </javac>
+    </target>
+
+    <!-- =========================
+         ===== PACKAGE (.aix) ====
+         ========================= -->
+
+    <target name="package" depends="clean,compile">
+        <mkdir dir="${dist.dir}"/>
+
+        <!-- Empaquetar clases -->
+        <jar
+                destfile="${dist.dir}/${component.name}.jar"
+                basedir="${classes.dir}">
+        </jar>
+
+        <!-- Crear archivo .aix -->
+        <zip
+                destfile="${dist.dir}/${component.name}.aix">
+            <fileset dir="${dist.dir}" includes="${component.name}.jar"/>
+        </zip>
+
+        <echo message="===================================="/>
+        <echo message="Extension packaged successfully:"/>
+        <echo message="${dist.dir}/${component.name}.aix"/>
+        <echo message="===================================="/>
+    </target>
+
+</project>
