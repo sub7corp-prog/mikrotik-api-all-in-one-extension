@@ -15,20 +15,17 @@
     <property name="component.version" value="2"/>
 
     <!-- Directorios -->
-    <property name="src.dir" value="com"/>
+    <property name="src.dir" value="extension"/>
     <property name="build.dir" value="build"/>
     <property name="dist.dir" value="dist"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
 
-    <!-- App Inventor SDK -->
-    <!-- AJUSTA ESTA RUTA A TU MAQUINA -->
-    <property name="ai.sdk.dir" value="C:/AppInventor"/>
+    <!-- Stubs para compilar (Android + App Inventor) -->
+    <property name="stubs.src.dir" value="stubs/src"/>
+    <property name="stubs.build.dir" value="${build.dir}/stubs"/>
+    <property name="stubs.jar" value="lib/appinventor-stubs.jar"/>
 
-    <!-- android.jar -->
-    <property name="android.jar"
-              value="${ai.sdk.dir}/android.jar"/>
-
-    <!-- Librerías extra (si agregas jars después) -->
+    <!-- Librerías -->
     <property name="lib.dir" value="lib"/>
 
     <!-- =========================
@@ -36,8 +33,8 @@
          ========================= -->
 
     <path id="classpath">
-        <pathelement location="${android.jar}"/>
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement location="${stubs.jar}"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar" excludes="appinventor-stubs.jar"/>
     </path>
 
     <!-- =========================
@@ -47,13 +44,33 @@
     <target name="clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <delete file="${stubs.jar}"/>
+    </target>
+
+    <!-- =========================
+         ===== PREPARE STUBS =====
+         ========================= -->
+
+    <target name="prepare-stubs">
+        <mkdir dir="${stubs.build.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+
+        <javac
+                srcdir="${stubs.src.dir}"
+                destdir="${stubs.build.dir}"
+                encoding="UTF-8"
+                source="1.8"
+                target="1.8"
+                includeantruntime="false"/>
+
+        <jar destfile="${stubs.jar}" basedir="${stubs.build.dir}"/>
     </target>
 
     <!-- =========================
          ===== COMPILE ===========
          ========================= -->
 
-    <target name="compile">
+    <target name="compile" depends="prepare-stubs">
         <mkdir dir="${classes.dir}"/>
 
         <javac

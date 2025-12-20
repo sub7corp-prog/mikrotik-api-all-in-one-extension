@@ -1,7 +1,6 @@
 package com.sub7corp.mikrotikapi.api;
 
 import com.sub7corp.mikrotikapi.core.MkClient;
-import com.sub7corp.mikrotikapi.core.MkResponse;
 import com.sub7corp.mikrotikapi.model.ApiError;
 import com.sub7corp.mikrotikapi.model.ApiResult;
 
@@ -27,7 +26,7 @@ public class HotspotApi {
             String comment
     ) {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/ip/hotspot/user/add",
                     "=name=" + username,
                     "=password=" + password,
@@ -35,9 +34,9 @@ public class HotspotApi {
                     "=comment=" + comment
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("HOTSPOT_CREATE_ERROR", res.getTrapMessage())
+                        new ApiError("HOTSPOT_CREATE_ERROR", res.getMessage())
                 );
             }
 
@@ -55,14 +54,14 @@ public class HotspotApi {
     // =========================
     public ApiResult removeUser(String username) {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/ip/hotspot/user/remove",
                     "=.id=" + username
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("HOTSPOT_REMOVE_ERROR", res.getTrapMessage())
+                        new ApiError("HOTSPOT_REMOVE_ERROR", res.getMessage())
                 );
             }
 
@@ -80,17 +79,17 @@ public class HotspotApi {
     // =========================
     public ApiResult listUsers() {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/ip/hotspot/user/print"
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("HOTSPOT_LIST_ERROR", res.getTrapMessage())
+                        new ApiError("HOTSPOT_LIST_ERROR", res.getMessage())
                 );
             }
 
-            List<Map<String, String>> users = res.getRecords();
+            List<HashMap<String, String>> users = res.getRecords();
             return ApiResult.success(users);
 
         } catch (Exception e) {
@@ -105,14 +104,14 @@ public class HotspotApi {
     // =========================
     public ApiResult disconnectUser(String username) {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/ip/hotspot/active/remove",
                     "=.id=" + username
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("HOTSPOT_DISCONNECT_ERROR", res.getTrapMessage())
+                        new ApiError("HOTSPOT_DISCONNECT_ERROR", res.getMessage())
                 );
             }
 

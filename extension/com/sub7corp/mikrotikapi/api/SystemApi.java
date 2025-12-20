@@ -1,7 +1,6 @@
 package com.sub7corp.mikrotikapi.api;
 
 import com.sub7corp.mikrotikapi.core.MkClient;
-import com.sub7corp.mikrotikapi.core.MkResponse;
 import com.sub7corp.mikrotikapi.model.ApiError;
 import com.sub7corp.mikrotikapi.model.ApiResult;
 
@@ -21,13 +20,13 @@ public class SystemApi {
     // =========================
     public ApiResult getIdentity() {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/system/identity/print"
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("SYSTEM_IDENTITY_ERROR", res.getTrapMessage())
+                        new ApiError("SYSTEM_IDENTITY_ERROR", res.getMessage())
                 );
             }
 
@@ -50,13 +49,13 @@ public class SystemApi {
     // =========================
     public ApiResult getResources() {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/system/resource/print"
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("SYSTEM_RESOURCE_ERROR", res.getTrapMessage())
+                        new ApiError("SYSTEM_RESOURCE_ERROR", res.getMessage())
                 );
             }
 
@@ -79,13 +78,13 @@ public class SystemApi {
     // =========================
     public ApiResult getClock() {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/system/clock/print"
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("SYSTEM_CLOCK_ERROR", res.getTrapMessage())
+                        new ApiError("SYSTEM_CLOCK_ERROR", res.getMessage())
                 );
             }
 
@@ -108,15 +107,15 @@ public class SystemApi {
     // =========================
     public ApiResult ping(String address, int count) {
         try {
-            MkResponse res = client.execute(
+            MkClient.MkResult res = client.execute(
                     "/ping",
                     "=address=" + address,
                     "=count=" + count
             );
 
-            if (res.hasTrap()) {
+            if (res.isError()) {
                 return ApiResult.error(
-                        new ApiError("PING_ERROR", res.getTrapMessage())
+                        new ApiError("PING_ERROR", res.getMessage())
                 );
             }
 

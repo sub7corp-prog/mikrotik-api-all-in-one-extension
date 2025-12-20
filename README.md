@@ -35,11 +35,17 @@ extension/
 │  │  ├─ MkConnection.java
 │  │  ├─ MkClient.java
 │  │  └─ MkResponse.java
+│  ├─ model/
+│  │  ├─ ApiError.java
+│  │  └─ ApiResult.java
 │  └─ api/
 │     ├─ HotspotApi.java
 │     ├─ ProfileApi.java
 │     ├─ ActiveApi.java
 │     └─ SystemApi.java
+├─ org/json/
+│  ├─ JSONArray.java
+│  └─ JSONObject.java
 ```
 
 ---
@@ -105,3 +111,16 @@ México 🇲🇽
 ## 📜 Licencia
 
 MIT License
+
+---
+
+## 🏗️ Cómo compilar la extensión
+
+El proyecto incluye stubs mínimos para Android y App Inventor, de modo que no necesitas el SDK externo para generar el artefacto.
+
+1. Instala Java 8+ y Apache Ant.
+2. Ejecuta: `ant package`
+   - Genera `lib/appinventor-stubs.jar` a partir de `stubs/src`.
+   - Compila el código de `extension/` y deja los artefactos en `dist/`:
+     - `MikrotikApiExtension.jar`
+     - `MikrotikApiExtension.aix`
